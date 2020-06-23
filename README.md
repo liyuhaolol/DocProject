@@ -137,3 +137,16 @@ mapView.getMap().setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
                     }
                 });                         
 ```
+
+- MapUtil的使用
+
+```java
+//转跳高德地图
+MapUtil.jumpToGaodeMap(MapActivity.this, bean);
+//转跳百度地图
+MapUtil.jumpToBaiduMap(MapActivity.this, bean);
+//转跳腾讯地图
+MapUtil.jumpToTengxunMap(MapActivity.this, bean);
+//转跳谷歌地图
+MapUtil.jumpToGoogleMap(MapActivity.this, bean);
+```
