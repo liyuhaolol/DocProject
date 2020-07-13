@@ -26,6 +26,18 @@ intent = new Intent(MainActivity.this, RadioActivity.class);
 startActivity(intent);
 ```
 
+- 需要注意的资源文件
+
+- 前言：经过我自己的测试，理论上app结构下的重名文件会直接覆盖moudle中的资源文件，所以要不要
+替换这些资源文件取决于你自己实测的测试结果。以下的资源文件，最好测试一下，如果害怕可以直接替换
+
+```java
+res/drawable/jpush_notification_icon
+//此文件为状态栏小图标，不是所有系统都有显示，推荐使用原生系统测试
+res/values/colors
+//对应的颜色，需要调整，根绝设计图验证颜色
+```
+
 ## moudle-ft_newspaper
 
 - 调用方法
@@ -149,4 +161,111 @@ MapUtil.jumpToBaiduMap(MapActivity.this, bean);
 MapUtil.jumpToTengxunMap(MapActivity.this, bean);
 //转跳谷歌地图
 MapUtil.jumpToGoogleMap(MapActivity.this, bean);
+```
+
+## moudle-ft_jpush
+
+- 只需要在build.gradle中引用就可以直接生效，不需要在代码里进行实际的调用
+
+- 需要在configs.gradle中配置对应的JPUSH_KEY,否则项目会报错
+
+- 需要注意的资源文件
+
+- 前言：经过我自己的测试，理论上app结构下的重名文件会直接覆盖moudle中的资源文件，所以要不要
+替换这些资源文件取决于你自己实测的测试结果。以下的资源文件，最好测试一下，如果害怕可以直接替换
+
+```java
+res/drawable/jpush_notification_icon
+//此文件为状态栏小图标，不是所有系统都有显示，推荐使用原生系统测试
+res/values/colors
+//对应的颜色，需要调整，根据设计图验证颜色
+```
+
+## moudle-share_sdk
+
+- 只需要在build.gradle中引用就可以直接生效，不需要在代码里进行实际的调用
+
+- 配置方法
+
+- share_sdk使用了集成方法，所以参数提取到配置文件里，意义不大，所以必须在share_sdk/build.gradle中进行修改
+
+```gradle
+//1.src/main/assets/ic_launcher.png需替换为项目的xxxhdpi对应的图片，否则无图稿件图标显示错误
+//2.各个平台对应的key和secret按照上线要求修改，无用的平台不需要删除对应内容
+//3.必须提供一个图标的网络访问路径，否则twitter分享无图稿件会有问题：buildConfigField('String','ICON_URL',"")
+//4.buildConfigField('String','ACTIVITE_LIST',"")来控制分享的渠道，顺序
+
+//注意事项
+//必须提供图标的网络连接，否则就不用添加twitter渠道
+//如果加入facebook渠道，必须使用https，需要前方（后台）提供支持ssl证书的域名，否则就不用添加facebook渠道
+//下方的平台配置
+
+MobSDK {
+    appKey "输入appKey"
+    appSecret "输入appSecret"
+    gui false
+
+    //从集成文件里移除无用的权限，避免华为等平台审核时审核到你并不想添加的权限。
+    permissions {
+        exclude "android.permission.READ_SMS",
+                "android.permission.SEND_SMS",
+                "android.permission.WRITE_SMS",
+                "android.permission.RECEIVE_SMS",
+                "android.permission.RECEIVE_WAP_PUSH",
+                "android.permission.RECEIVE_MMS",
+                "android.permission.CALL_PHONE",
+                "android.permission.READ_CALL_LOG",
+                "android.permission.WRITE_CALL_LOG",
+                "android.permission.PROCESS_OUTGOING_CALLS",
+                "android.permission.WRITE_EXTERNAL_STORAGE",
+                "android.permission.READ_EXTERNAL_STORAGE"
+    }
+
+//如果没有的上的平台，他的信息可以无视，留着删除都行
+    ShareSDK {
+        //平台配置信息
+        devInfo {
+            SinaWeibo {
+                appKey "appKey"
+                appSecret "appSecret"
+                callbackUri "callbackUri"
+                shareByAppClient true
+                enable true
+            }
+            Wechat {
+                appKey "appKey"
+                appSecret "appSecret"
+                bypassApproval false
+                enable true
+            }
+            WechatMoments {
+                appKey "appKey"
+                appSecret "appSecret"
+                bypassApproval false
+                enable true
+            }
+            QQ {
+                appId "appId"
+                appKey "appKey"
+                shareByAppClient true
+                bypassApproval false
+                enable true
+            }
+            Facebook {
+                appKey "appKey"
+                appSecret "appSecret"
+                callbackUri "callbackUri"
+                shareByAppClient true
+                enable true
+            }
+            Twitter {
+                appKey "appKey"
+                appSecret "appSecret"
+                callbackUri "callbackUri"
+                enable true
+            }
+        }
+    }
+
+}
 ```
