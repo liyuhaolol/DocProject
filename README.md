@@ -176,9 +176,14 @@ MapUtil.jumpToGoogleMap(MapActivity.this, bean);
 
 ```java
 res/drawable/jpush_notification_icon
-//此文件为状态栏小图标，不是所有系统都有显示，推荐使用原生系统测试
-res/values/colors
-//对应的颜色，需要调整，根据设计图验证颜色
+
+此文件为状态栏小图标，不是所有系统都有显示，推荐使用原生系统测试
+
+res/drawable-xxhdpi/ic_launcher.png
+
+此文件用来控制app通知的大图标显示。
+因为在原生系统下大部分国外App默认都是使用的<圆形图标>。
+所以这里将对应<ic_launcher_round.png>复制到此文件夹并改名成为<ic_launcher.png>
 ```
 
 ## moudle-share_sdk
